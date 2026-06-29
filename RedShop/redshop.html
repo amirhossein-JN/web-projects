@@ -1,0 +1,2188 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Shop - فروشگاه اینترنتی</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #ef4444;
+            --accent-dark: #dc2626;
+            --accent-light: #f87171;
+            --text: #ffffff;
+            --text-secondary: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: rgba(148, 163, 184, 0.2);
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background: linear-gradient(-45deg, #0f172a, #1e293b, #0a0f1f, #1a1f35);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        body.light-mode {
+            --primary: #ffffff;
+            --secondary: #f8fafc;
+            --accent: #ef4444;
+            --accent-dark: #dc2626;
+            --accent-light: #f87171;
+            --text: #1e293b;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --border: rgba(15, 23, 42, 0.1);
+            background: linear-gradient(-45deg, #f8fafc, #f1f5f9, #ffffff, #e2e8f0);
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(239, 68, 68, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(248, 113, 113, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(220, 38, 38, 0.1) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, -50px) rotate(90deg); }
+            50% { transform: translate(100px, 0) rotate(180deg); }
+            75% { transform: translate(50px, 50px) rotate(270deg); }
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="rgba(255,255,255,0.03)"><path d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/></g></g></svg>');
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body.light-mode::before {
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(239, 68, 68, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(248, 113, 113, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(220, 38, 38, 0.05) 0%, transparent 50%);
+        }
+
+        body.light-mode::after {
+            background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="rgba(0,0,0,0.02)"><path d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/></g></g></svg>');
+        }
+
+        main {
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1.2rem 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        body.light-mode header {
+            background: rgba(248, 250, 252, 0.9);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ef4444, #f87171, #dc2626);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            white-space: nowrap;
+            text-shadow: 0 0 30px rgba(239, 68, 68, 0.3);
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.9rem 1.5rem;
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            color: var(--text);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .search-bar input {
+            background: rgba(248, 250, 252, 0.8);
+            color: var(--text);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--accent-light);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3), inset 0 0 10px rgba(239, 68, 68, 0.1);
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        body.light-mode .search-bar input:focus {
+            background: rgba(248, 250, 252, 0.95);
+        }
+
+        .search-bar input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.8rem 1rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent-light);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .btn {
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #f87171);
+            color: white;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        body.light-mode .btn-secondary {
+            background: rgba(248, 250, 252, 0.6);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-light);
+            background: rgba(239, 68, 68, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* PAGE CONTAINER */
+        .page {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .page-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--accent), #f87171);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .content-section {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border);
+            border-radius: 1.25rem;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            transition: all 0.4s ease;
+        }
+
+        body.light-mode .content-section {
+            background: rgba(248, 250, 252, 0.7);
+        }
+
+        .content-section h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--accent-light);
+        }
+
+        .content-section p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-right: 0;
+        }
+
+        .content-section li {
+            padding: 0.75rem 0;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .content-section li:last-child {
+            border-bottom: none;
+        }
+
+        .content-section li::before {
+            content: '✓ ';
+            color: var(--success);
+            font-weight: 700;
+            margin-left: 0.75rem;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 1.5rem;
+            padding: 3rem;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.4s ease;
+            transition: all 0.4s ease;
+        }
+
+        body.light-mode .modal-content {
+            background: rgba(248, 250, 252, 0.98);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), #f87171);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--accent);
+            transform: rotate(90deg);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            color: var(--text);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .form-input {
+            background: rgba(248, 250, 252, 0.8);
+            color: var(--text);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-light);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        body.light-mode .form-input:focus {
+            background: rgba(248, 250, 252, 0.95);
+        }
+
+        .form-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .form-tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .form-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .form-content {
+            display: none;
+        }
+
+        .form-content.active {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--accent), #f87171);
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(239, 68, 68, 0.4);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .form-footer a {
+            color: var(--accent);
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .form-footer a:hover {
+            color: var(--accent-light);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(248, 113, 113, 0.15));
+            backdrop-filter: blur(10px);
+            padding: 6rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        body.light-mode .hero {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(248, 113, 113, 0.08));
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(248, 113, 113, 0.1) 0%, transparent 70%);
+            animation: pulse 5s ease-in-out infinite 1s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ef4444, #f87171, #dc2626);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        /* PROMO CARDS */
+        .promo-section {
+            max-width: 1400px;
+            margin: -3rem auto 3rem;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .promo-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 1.25rem;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.light-mode .promo-card {
+            background: rgba(248, 250, 252, 0.7);
+        }
+
+        .promo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .promo-card:hover {
+            transform: translateY(-12px);
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 20px 50px rgba(239, 68, 68, 0.2), inset 0 0 20px rgba(239, 68, 68, 0.05);
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        body.light-mode .promo-card:hover {
+            background: rgba(248, 250, 252, 0.9);
+        }
+
+        .promo-card:hover::before {
+            opacity: 1;
+        }
+
+        .promo-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .promo-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* CATEGORIES */
+        .categories-section {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, #ef4444, #f87171);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .category-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.light-mode .category-card {
+            background: rgba(248, 250, 252, 0.7);
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .category-card:hover {
+            border-color: var(--accent-light);
+            background: rgba(239, 68, 68, 0.15);
+            transform: scale(1.08) translateY(-5px);
+            box-shadow: 0 15px 40px rgba(239, 68, 68, 0.25);
+        }
+
+        body.light-mode .category-card:hover {
+            background: rgba(239, 68, 68, 0.08);
+        }
+
+        .category-card:hover::before {
+            opacity: 1;
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .category-card:hover .category-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .category-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* PRODUCTS SECTION */
+        .products-section {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border);
+            border-radius: 1.25rem;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        body.light-mode .product-card {
+            background: rgba(248, 250, 252, 0.7);
+        }
+
+        .product-card:hover {
+            transform: translateY(-12px);
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 25px 60px rgba(239, 68, 68, 0.3), inset 0 0 20px rgba(239, 68, 68, 0.05);
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        body.light-mode .product-card:hover {
+            background: rgba(248, 250, 252, 0.9);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(248, 113, 113, 0.15));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.2) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(50px, 50px); }
+        }
+
+        .discount-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, var(--accent), #dc2626);
+            color: white;
+            padding: 0.35rem 0.85rem;
+            border-radius: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+            z-index: 2;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-secondary);
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .star {
+            color: var(--warning);
+        }
+
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), #f87171);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .original-price {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-add-cart {
+            flex: 1;
+            background: linear-gradient(135deg, var(--accent), #f87171);
+            color: white;
+            border: none;
+            padding: 0.65rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-add-cart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-wishlist {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.65rem 0.85rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        body.light-mode .btn-wishlist {
+            background: rgba(248, 250, 252, 0.6);
+        }
+
+        .btn-wishlist:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+            transform: scale(1.1);
+        }
+
+        /* CART SIDEBAR */
+        .cart-sidebar {
+            position: fixed;
+            right: -450px;
+            top: 0;
+            width: 450px;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid var(--border);
+            z-index: 1000;
+            transition: right 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            box-shadow: -20px 0 60px rgba(0, 0, 0, 0.5);
+        }
+
+        body.light-mode .cart-sidebar {
+            background: rgba(248, 250, 252, 0.98);
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(30, 41, 59, 0.6);
+            transition: all 0.4s ease;
+        }
+
+        body.light-mode .cart-header {
+            background: rgba(248, 250, 252, 0.8);
+        }
+
+        .cart-items {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .cart-item {
+            background: rgba(248, 250, 252, 0.7);
+        }
+
+        .cart-item:hover {
+            border-color: var(--accent-light);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+            color: var(--text-secondary);
+        }
+
+        .cart-item-price {
+            background: linear-gradient(135deg, var(--accent), #f87171);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .cart-item-qty {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 0.35rem 0.75rem;
+        }
+
+        body.light-mode .cart-item-qty {
+            background: rgba(248, 250, 252, 0.8);
+        }
+
+        .cart-item-qty button {
+            background: none;
+            border: none;
+            color: var(--accent-light);
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+
+        .cart-item-qty button:hover {
+            transform: scale(1.2);
+        }
+
+        .cart-footer {
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            background: rgba(30, 41, 59, 0.6);
+            transition: all 0.4s ease;
+        }
+
+        body.light-mode .cart-footer {
+            background: rgba(248, 250, 252, 0.8);
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(248, 113, 113, 0.1));
+            padding: 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--border);
+        }
+
+        .btn-checkout {
+            width: 100%;
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-checkout:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(16, 185, 129, 0.4);
+        }
+
+        /* FOOTER */
+        footer {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border);
+            padding: 4rem 2rem 2rem;
+            margin-top: 4rem;
+            position: relative;
+            z-index: 2;
+            transition: all 0.4s ease;
+        }
+
+        body.light-mode footer {
+            background: rgba(248, 250, 252, 0.9);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1rem;
+            margin-bottom: 1.25rem;
+            background: linear-gradient(135deg, var(--accent), #f87171);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section h3:hover {
+            transform: translateX(-4px);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section a {
+            color: var(--text-muted);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent-light);
+            transform: translateX(-4px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .telegram-section {
+            background: linear-gradient(135deg, rgba(0, 136, 204, 0.1), rgba(0, 136, 204, 0.05));
+            border: 1px solid rgba(0, 136, 204, 0.2);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .telegram-section h3 {
+            color: #0088cc;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .telegram-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #0088cc, #0077b6);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
+        }
+
+        .telegram-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.4);
+        }
+
+        /* USER INFO */
+        .user-info {
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .user-info.active {
+            display: flex;
+        }
+
+        .user-name {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .user-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            min-width: 200px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            margin-top: 0.5rem;
+            transition: all 0.4s ease;
+        }
+
+        body.light-mode .user-menu {
+            background: rgba(248, 250, 252, 0.98);
+        }
+
+        .user-menu.active {
+            display: block;
+        }
+
+        .user-menu-item {
+            padding: 0.75rem 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .user-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .user-menu-item:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--accent);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-bar {
+                max-width: 100%;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+
+            .promo-section {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 2rem;
+            }
+
+            .page-content {
+                padding: 2rem 1rem;
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* ANIMATIONS */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-card {
+            animation: slideIn 0.6s ease forwards;
+        }
+
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.2s; }
+        .product-card:nth-child(3) { animation-delay: 0.3s; }
+        .product-card:nth-child(4) { animation-delay: 0.4s; }
+        .product-card:nth-child(5) { animation-delay: 0.5s; }
+        .product-card:nth-child(6) { animation-delay: 0.6s; }
+        .product-card:nth-child(7) { animation-delay: 0.7s; }
+        .product-card:nth-child(8) { animation-delay: 0.8s; }
+    </style>
+</head>
+<body>
+    <main>
+        <!-- HEADER -->
+        <header>
+            <div class="header-container">
+                <div class="logo" onclick="showPage('home')">🔴 Red Shop</div>
+                <div class="search-bar">
+                    <input type="text" placeholder="جستجو کنید...">
+                </div>
+                <div class="header-actions">
+                    <button class="theme-toggle" onclick="toggleTheme()" title="تغییر تم">🌙</button>
+                    <button class="btn btn-secondary" onclick="toggleCart()">🛒 سبد خرید</button>
+                    <div class="user-info" id="userInfo">
+                        <span class="user-name" id="userName"></span>
+                        <button style="background: none; border: none; color: var(--accent); cursor: pointer; font-size: 1.2rem;" onclick="toggleUserMenu()">⚙️</button>
+                        <div class="user-menu" id="userMenu">
+                            <div class="user-menu-item" onclick="showPage('profile')">پروفایل</div>
+                            <div class="user-menu-item" onclick="showPage('orders')">سفارش‌های من</div>
+                            <div class="user-menu-item" onclick="showPage('wishlist')">علاقه‌مندی‌ها</div>
+                            <div class="user-menu-item" onclick="logout()">خروج</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="loginBtn" onclick="openLoginModal()">ورود</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- HOME PAGE -->
+        <div class="page active" id="homePage">
+            <!-- HERO SECTION -->
+            <section class="hero">
+                <div class="hero-content">
+                    <h1>تخفیف تا ۵۰% برای محصولات انتخابی</h1>
+                    <p>بهترین محصولات با بهترین قیمت‌ها. فرصت محدود برای خریداران عزیز</p>
+                    <button class="btn btn-primary">شروع خرید</button>
+                </div>
+            </section>
+
+            <!-- PROMO CARDS -->
+            <section class="promo-section">
+                <div class="promo-card">
+                    <h3>✓ تضمین اصالت</h3>
+                    <p>تمام محصولات اصل و معتبر</p>
+                </div>
+                <div class="promo-card">
+                    <h3>🚚 ارسال رایگان</h3>
+                    <p>برای خریدهای بالای ۵۰۰ هزار تومان</p>
+                </div>
+                <div class="promo-card">
+                    <h3>📞 پشتیبانی ۲۴/۷</h3>
+                    <p>تیم پشتیبانی آماده کمک است</p>
+                </div>
+            </section>
+
+            <!-- CATEGORIES -->
+            <section class="categories-section">
+                <h2 class="section-title">🏷️ دسته‌بندی‌ها</h2>
+                <div class="categories-grid">
+                    <div class="category-card">
+                        <div class="category-icon">📱</div>
+                        <div class="category-name">الکترونیک</div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon">👕</div>
+                        <div class="category-name">لباس</div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon">📚</div>
+                        <div class="category-name">کتاب</div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon">🍔</div>
+                        <div class="category-name">خوراکی</div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon">⚽</div>
+                        <div class="category-name">ورزشی</div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon">💄</div>
+                        <div class="category-name">آرایشی</div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon">🧸</div>
+                        <div class="category-name">اسباب‌بازی</div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon">🏠</div>
+                        <div class="category-name">خانگی</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PRODUCTS -->
+            <section class="products-section">
+                <h2 class="section-title">⭐ محصولات برتر</h2>
+                <div class="products-grid" id="productsGrid">
+                    <div class="product-card">
+                        <div class="product-image">📱<div class="discount-badge">40%</div></div>
+                        <div class="product-info">
+                            <div class="product-name">گوشی هوشمند پرو</div>
+                            <div class="product-rating"><span class="star">⭐</span><span>4.8 (256)</span></div>
+                            <div class="product-price"><span class="price">15,000,000 تومان</span><span class="original-price">25,000,000 تومان</span></div>
+                            <div class="product-actions">
+                                <button class="btn-add-cart" onclick="addToCart(1)">افزودن به سبد</button>
+                                <button class="btn-wishlist" onclick="toggleWishlist(this)">❤️</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">💻<div class="discount-badge">25%</div></div>
+                        <div class="product-info">
+                            <div class="product-name">لپ‌تاپ گیمینگ</div>
+                            <div class="product-rating"><span class="star">⭐</span><span>4.7 (189)</span></div>
+                            <div class="product-price"><span class="price">45,000,000 تومان</span><span class="original-price">60,000,000 تومان</span></div>
+                            <div class="product-actions">
+                                <button class="btn-add-cart" onclick="addToCart(2)">افزودن به سبد</button>
+                                <button class="btn-wishlist" onclick="toggleWishlist(this)">❤️</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">🎧<div class="discount-badge">37%</div></div>
+                        <div class="product-info">
+                            <div class="product-name">هدفون بی‌سیم</div>
+                            <div class="product-rating"><span class="star">⭐</span><span>4.6 (412)</span></div>
+                            <div class="product-price"><span class="price">2,500,000 تومان</span><span class="original-price">4,000,000 تومان</span></div>
+                            <div class="product-actions">
+                                <button class="btn-add-cart" onclick="addToCart(3)">افزودن به سبد</button>
+                                <button class="btn-wishlist" onclick="toggleWishlist(this)">❤️</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">📱<div class="discount-badge">33%</div></div>
+                        <div class="product-info">
+                            <div class="product-name">تبلت ۱۲ اینچ</div>
+                            <div class="product-rating"><span class="star">⭐</span><span>4.5 (178)</span></div>
+                            <div class="product-price"><span class="price">8,000,000 تومان</span><span class="original-price">12,000,000 تومان</span></div>
+                            <div class="product-actions">
+                                <button class="btn-add-cart" onclick="addToCart(4)">افزودن به سبد</button>
+                                <button class="btn-wishlist" onclick="toggleWishlist(this)">❤️</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">⌚<div class="discount-badge">36%</div></div>
+                        <div class="product-info">
+                            <div class="product-name">ساعت هوشمند</div>
+                            <div class="product-rating"><span class="star">⭐</span><span>4.4 (234)</span></div>
+                            <div class="product-price"><span class="price">3,500,000 تومان</span><span class="original-price">5,500,000 تومان</span></div>
+                            <div class="product-actions">
+                                <button class="btn-add-cart" onclick="addToCart(5)">افزودن به سبد</button>
+                                <button class="btn-wishlist" onclick="toggleWishlist(this)">❤️</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">📷<div class="discount-badge">33%</div></div>
+                        <div class="product-info">
+                            <div class="product-name">دوربین دیجیتال</div>
+                            <div class="product-rating"><span class="star">⭐</span><span>4.9 (567)</span></div>
+                            <div class="product-price"><span class="price">12,000,000 تومان</span><span class="original-price">18,000,000 تومان</span></div>
+                            <div class="product-actions">
+                                <button class="btn-add-cart" onclick="addToCart(6)">افزودن به سبد</button>
+                                <button class="btn-wishlist" onclick="toggleWishlist(this)">❤️</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">🔊<div class="discount-badge">40%</div></div>
+                        <div class="product-info">
+                            <div class="product-name">اسپیکر بلوتوث</div>
+                            <div class="product-rating"><span class="star">⭐</span><span>4.3 (345)</span></div>
+                            <div class="product-price"><span class="price">1,500,000 تومان</span><span class="original-price">2,500,000 تومان</span></div>
+                            <div class="product-actions">
+                                <button class="btn-add-cart" onclick="addToCart(7)">افزودن به سبد</button>
+                                <button class="btn-wishlist" onclick="toggleWishlist(this)">❤️</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">🔌<div class="discount-badge">33%</div></div>
+                        <div class="product-info">
+                            <div class="product-name">شارژر سریع</div>
+                            <div class="product-rating"><span class="star">⭐</span><span>4.6 (678)</span></div>
+                            <div class="product-price"><span class="price">800,000 تومان</span><span class="original-price">1,200,000 تومان</span></div>
+                            <div class="product-actions">
+                                <button class="btn-add-cart" onclick="addToCart(8)">افزودن به سبد</button>
+                                <button class="btn-wishlist" onclick="toggleWishlist(this)">❤️</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ABOUT PAGE -->
+        <div class="page" id="aboutPage">
+            <div class="page-content">
+                <h1 class="page-title">درباره Red Shop</h1>
+                <p class="page-description">Red Shop یک فروشگاه اینترنتی مدرن و قابل اعتماد است که با هدف ارائه بهترین محصولات و خدمات به مشتریان تاسیس شده است.</p>
+                
+                <div class="content-section">
+                    <h3>تاریخچه ما</h3>
+                    <p>Red Shop در سال ۱۴۰۲ با تیمی متخصص و پرتلاش شروع به فعالیت کرد. ما باور داریم که تجارت الکترونیکی باید شفاف، قابل اعتماد و مشتری‌محور باشد.</p>
+                    <p>امروزه ما میلیون‌ها مشتری راضی در سراسر کشور داریم و هر روز تلاش می‌کنیم تا خدمات بهتری ارائه دهیم.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>ارزش‌های ما</h3>
+                    <ul>
+                        <li>کیفیت و اصالت محصولات</li>
+                        <li>رضایت مشتری در اولویت</li>
+                        <li>شفافیت و صادقانگی</li>
+                        <li>نوآوری و بهبود مستمر</li>
+                        <li>پشتیبانی عالی</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- MISSION PAGE -->
+        <div class="page" id="missionPage">
+            <div class="page-content">
+                <h1 class="page-title">مأموریت ما</h1>
+                <p class="page-description">مأموریت Red Shop ارائه بهترین تجربه خریداری آنلاین برای تمام مشتریان است.</p>
+                
+                <div class="content-section">
+                    <h3>چشم‌انداز</h3>
+                    <p>ما می‌خواهیم بزرگ‌ترین و معتبرترین فروشگاه اینترنتی در منطقه باشیم که مشتریان به ما اعتماد کنند.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>اهداف ما</h3>
+                    <ul>
+                        <li>ارائه محصولات با کیفیت بالا</li>
+                        <li>قیمت‌های رقابتی و منصفانه</li>
+                        <li>خدمات پس از فروش عالی</li>
+                        <li>تحویل سریع و ایمن</li>
+                        <li>تجربه خریداری لذت‌بخش</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- TEAM PAGE -->
+        <div class="page" id="teamPage">
+            <div class="page-content">
+                <h1 class="page-title">تیم ما</h1>
+                <p class="page-description">Red Shop توسط تیمی متخصص و پرتلاش اداره می‌شود که هر روز برای بهتر شدن تلاش می‌کند.</p>
+                
+                <div class="content-section">
+                    <h3>اعضای تیم</h3>
+                    <ul>
+                        <li>مدیریت: تیم مدیریتی با تجربه</li>
+                        <li>فروش: متخصصان فروش و مشاوره</li>
+                        <li>پشتیبانی: تیم پشتیبانی ۲۴/۷</li>
+                        <li>لجستیک: تیم تحویل و لجستیک</li>
+                        <li>فناوری: متخصصان فناوری و برنامه‌نویسی</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h3>فرهنگ شرکتی</h3>
+                    <p>ما باور داریم که تیم قوی و متحد می‌تواند کارهای بزرگ انجام دهد. فرهنگ شرکتی ما بر پایه احترام، تعاون و نوآوری است.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SERVICES PAGE -->
+        <div class="page" id="servicesPage">
+            <div class="page-content">
+                <h1 class="page-title">خدمات ما</h1>
+                <p class="page-description">Red Shop انواع خدمات مختلفی را برای راحتی مشتریان ارائه می‌دهد.</p>
+                
+                <div class="content-section">
+                    <h3>خدمات اصلی</h3>
+                    <ul>
+                        <li>فروش محصولات اصل و معتبر</li>
+                        <li>ارسال سریع و ایمن</li>
+                        <li>بازگشت و تعویض محصول</li>
+                        <li>گارانتی و خدمات پس از فروش</li>
+                        <li>مشاوره و کمک خریداری</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h3>خدمات ویژه</h3>
+                    <ul>
+                        <li>خریدهای عمده‌ای</li>
+                        <li>خدمات شرکتی</li>
+                        <li>سفارش‌های سفارشی</li>
+                        <li>برنامه وفاداری</li>
+                        <li>تخفیف‌های ویژه</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACCOUNT PAGE -->
+        <div class="page" id="profilePage">
+            <div class="page-content">
+                <h1 class="page-title">حساب کاربری</h1>
+                <p class="page-description">مدیریت اطلاعات شخصی و تنظیمات حساب خود.</p>
+                
+                <div class="content-section">
+                    <h3>اطلاعات شخصی</h3>
+                    <p>نام: <span id="profileName">-</span></p>
+                    <p>شماره تلفن: <span id="profilePhone">-</span></p>
+                </div>
+
+                <div class="content-section">
+                    <h3>تنظیمات</h3>
+                    <ul>
+                        <li>ویرایش اطلاعات شخصی</li>
+                        <li>تغییر رمز عبور</li>
+                        <li>مدیریت آدرس‌های تحویل</li>
+                        <li>تنظیمات اطلاع‌رسانی</li>
+                        <li>حریم خصوصی</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ORDERS PAGE -->
+        <div class="page" id="ordersPage">
+            <div class="page-content">
+                <h1 class="page-title">سفارش‌های من</h1>
+                <p class="page-description">مشاهده و ردیابی سفارش‌های شما.</p>
+                
+                <div class="content-section">
+                    <h3>سفارش‌های فعال</h3>
+                    <p>شما هنوز سفارشی ندارید.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>سفارش‌های تکمیل‌شده</h3>
+                    <p>تمام سفارش‌های تکمیل‌شده شما اینجا نمایش داده می‌شود.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- WISHLIST PAGE -->
+        <div class="page" id="wishlistPage">
+            <div class="page-content">
+                <h1 class="page-title">علاقه‌مندی‌ها</h1>
+                <p class="page-description">محصولات مورد علاقه‌ی شما.</p>
+                
+                <div class="content-section">
+                    <h3>محصولات ذخیره‌شده</h3>
+                    <p>هنوز محصولی به علاقه‌مندی‌های خود اضافه نکرده‌اید.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACT PAGE -->
+        <div class="page" id="contactPage">
+            <div class="page-content">
+                <h1 class="page-title">تماس با ما</h1>
+                <p class="page-description">ما همیشه برای شنیدن نظرات و پیشنهادات شما آماده هستیم.</p>
+                
+                <div class="content-section">
+                    <h3>راه‌های تماس</h3>
+                    <ul>
+                        <li>تلفن: ۰۲۱-۱۲۳۴۵۶۷۸</li>
+                        <li>ایمیل: info@redshop.com</li>
+                        <li>تلگرام: @IDIAmir</li>
+                        <li>اینستاگرام: @redshop_official</li>
+                        <li>آدرس: تهران، خیابان انقلاب</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h3>ساعات کاری</h3>
+                    <ul>
+                        <li>شنبه تا پنج‌شنبه: ۹ صبح تا ۶ شام</li>
+                        <li>جمعه: ۱۰ صبح تا ۴ عصر</li>
+                        <li>پشتیبانی آنلاین: ۲۴/۷</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ PAGE -->
+        <div class="page" id="faqPage">
+            <div class="page-content">
+                <h1 class="page-title">سوالات متداول</h1>
+                <p class="page-description">پاسخ به سوالات رایج مشتریان.</p>
+                
+                <div class="content-section">
+                    <h3>چگونه می‌توانم سفارش دهم؟</h3>
+                    <p>برای سفارش دادن، ابتدا ثبت نام کنید، سپس محصولات را به سبد خود اضافه کنید و در نهایت اطلاعات تحویل و پرداخت را تکمیل کنید.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>هزینه ارسال چقدر است؟</h3>
+                    <p>ارسال برای خریدهای بالای ۵۰۰ هزار تومان رایگان است. برای خریدهای کمتر، هزینه ارسال ۲۵ هزار تومان است.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>آیا می‌توانم محصول را برگردانم؟</h3>
+                    <p>بله، شما می‌توانید محصول را تا ۷ روز پس از دریافت برگردانید. محصول باید در شرایط اصلی باشد.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>چگونه می‌توانم سفارش خود را ردیابی کنم؟</h3>
+                    <p>پس از ثبت سفارش، کد ردیابی به ایمیل شما ارسال می‌شود. می‌توانید از این کد برای ردیابی استفاده کنید.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>روش‌های پرداخت کدام‌ها هستند؟</h3>
+                    <p>ما روش‌های پرداخت زیر را پذیرفته‌ایم: کارت اعتباری، درگاه بانکی، کیف پول دیجیتال و پرداخت در محل.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TERMS PAGE -->
+        <div class="page" id="termsPage">
+            <div class="page-content">
+                <h1 class="page-title">شرایط و ضوابط</h1>
+                <p class="page-description">لطفاً قبل از استفاده از Red Shop، شرایط و ضوابط را بخوانید.</p>
+                
+                <div class="content-section">
+                    <h3>شرایط استفاده</h3>
+                    <p>با استفاده از Red Shop، شما موافقت می‌کنید که تمام شرایط و ضوابط را قبول کرده‌اید. اگر با این شرایط موافق نیستید، لطفاً از استفاده از سایت خودداری کنید.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>حقوق و مسئولیت‌ها</h3>
+                    <ul>
+                        <li>Red Shop حق دارد شرایط را هر زمان تغییر دهد</li>
+                        <li>کاربران مسئول رفتار خود هستند</li>
+                        <li>Red Shop مسئول خسارت‌های غیرمستقیم نیست</li>
+                        <li>تمام محتوای سایت متعلق به Red Shop است</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h3>حریم خصوصی</h3>
+                    <p>Red Shop اطلاعات شخصی شما را محافظت می‌کند. ما اطلاعات شما را بدون رضایت شما با سوم شخص‌ها به اشتراک نمی‌گذاریم.</p>
+                </div>
+
+                <div class="content-section">
+                    <h3>مسئولیت قانونی</h3>
+                    <p>Red Shop تمام قوانین و مقررات مربوطه را رعایت می‌کند. کاربران نیز مسئول رعایت قوانین هستند.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- LOGIN/REGISTER MODAL -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Red Shop</h2>
+                <button class="modal-close" onclick="closeAuthModal()">✕</button>
+            </div>
+
+            <div class="form-tabs">
+                <button class="form-tab active" onclick="switchTab('login')">ورود</button>
+                <button class="form-tab" onclick="switchTab('register')">ثبت نام</button>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <div class="form-content active" id="loginForm">
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label class="form-label">شماره تلفن</label>
+                        <input type="tel" class="form-input" placeholder="09xxxxxxxxx" required id="loginPhone">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">رمز عبور</label>
+                        <input type="password" class="form-input" placeholder="رمز عبور خود را وارد کنید" required id="loginPassword">
+                    </div>
+                    <button type="submit" class="btn-submit">ورود</button>
+                </form>
+                <div class="form-footer">
+                    حساب ندارید؟ <a onclick="switchTab('register')">ثبت نام کنید</a>
+                </div>
+            </div>
+
+            <!-- REGISTER FORM -->
+            <div class="form-content" id="registerForm">
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label class="form-label">نام کامل</label>
+                        <input type="text" class="form-input" placeholder="نام خود را وارد کنید" required id="registerName">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">شماره تلفن</label>
+                        <input type="tel" class="form-input" placeholder="09xxxxxxxxx" required id="registerPhone">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">رمز عبور</label>
+                        <input type="password" class="form-input" placeholder="رمز عبور قوی انتخاب کنید" required id="registerPassword">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">تایید رمز عبور</label>
+                        <input type="password" class="form-input" placeholder="رمز عبور را دوباره وارد کنید" required id="registerPasswordConfirm">
+                    </div>
+                    <button type="submit" class="btn-submit">ثبت نام</button>
+                </form>
+                <div class="form-footer">
+                    حساب دارید؟ <a onclick="switchTab('login')">وارد شوید</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CART SIDEBAR -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2>سبد خرید</h2>
+            <button onclick="toggleCart()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='rotate(90deg)'" onmouseout="this.style.transform='rotate(0)'">✕</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <p style="text-align: center; color: var(--text-muted);">سبد خرید خالی است</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>جمع کل:</span>
+                <span id="cartTotal">۰ تومان</span>
+            </div>
+            <button class="btn-checkout">تکمیل خرید</button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 onclick="showPage('about')">درباره ما</h3>
+                <ul>
+                    <li><a onclick="showPage('about')">درباره Red Shop</a></li>
+                    <li><a onclick="showPage('mission')">مأموریت ما</a></li>
+                    <li><a onclick="showPage('team')">تیم ما</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3 onclick="showPage('services')">خدمات</h3>
+                <ul>
+                    <li><a onclick="showPage('profile')">حساب کاربری</a></li>
+                    <li><a onclick="showPage('orders')">سفارش‌های من</a></li>
+                    <li><a onclick="showPage('wishlist')">علاقه‌مندی‌ها</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3 onclick="showPage('contact')">پشتیبانی</h3>
+                <ul>
+                    <li><a onclick="showPage('contact')">تماس با ما</a></li>
+                    <li><a onclick="showPage('faq')">سوالات متداول</a></li>
+                    <li><a onclick="showPage('terms')">شرایط و ضوابط</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>تلگرام</h3>
+                <div class="telegram-section">
+                    <h3>📱 ما را در تلگرام دنبال کنید</h3>
+                    <a href="https://t.me/IDIAmir" target="_blank" class="telegram-link">@IDIAmir</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© ۱۴۰۵ Red Shop - تمام حقوق محفوظ است</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample products data
+        const products = [
+            { id: 1, name: 'گوشی هوشمند پرو', price: 15000000, originalPrice: 25000000, discount: 40, rating: 4.8, reviews: 256, emoji: '📱' },
+            { id: 2, name: 'لپ‌تاپ گیمینگ', price: 45000000, originalPrice: 60000000, discount: 25, rating: 4.7, reviews: 189, emoji: '💻' },
+            { id: 3, name: 'هدفون بی‌سیم', price: 2500000, originalPrice: 4000000, discount: 37, rating: 4.6, reviews: 412, emoji: '🎧' },
+            { id: 4, name: 'تبلت ۱۲ اینچ', price: 8000000, originalPrice: 12000000, discount: 33, rating: 4.5, reviews: 178, emoji: '📱' },
+            { id: 5, name: 'ساعت هوشمند', price: 3500000, originalPrice: 5500000, discount: 36, rating: 4.4, reviews: 234, emoji: '⌚' },
+            { id: 6, name: 'دوربین دیجیتال', price: 12000000, originalPrice: 18000000, discount: 33, rating: 4.9, reviews: 567, emoji: '📷' },
+            { id: 7, name: 'اسپیکر بلوتوث', price: 1500000, originalPrice: 2500000, discount: 40, rating: 4.3, reviews: 345, emoji: '🔊' },
+            { id: 8, name: 'شارژر سریع', price: 800000, originalPrice: 1200000, discount: 33, rating: 4.6, reviews: 678, emoji: '🔌' },
+            { id: 9, name: 'کیبورد مکانیکی', price: 2200000, originalPrice: 3500000, discount: 37, rating: 4.7, reviews: 423, emoji: '⌨️' },
+            { id: 10, name: 'موس بی‌سیم', price: 950000, originalPrice: 1500000, discount: 36, rating: 4.5, reviews: 289, emoji: '🖱️' },
+            { id: 11, name: 'مانیتور ۲۷ اینچ', price: 5500000, originalPrice: 8000000, discount: 31, rating: 4.8, reviews: 512, emoji: '🖥️' },
+            { id: 12, name: 'هارد اکسترنال', price: 1800000, originalPrice: 2800000, discount: 35, rating: 4.6, reviews: 345, emoji: '💾' },
+            { id: 13, name: 'کابل USB-C', price: 350000, originalPrice: 600000, discount: 41, rating: 4.4, reviews: 678, emoji: '🔌' },
+            { id: 14, name: 'پاور بانک ۲۰۰۰۰', price: 1200000, originalPrice: 1800000, discount: 33, rating: 4.7, reviews: 834, emoji: '🔋' },
+            { id: 15, name: 'ویب‌کم ۴K', price: 3200000, originalPrice: 5000000, discount: 36, rating: 4.9, reviews: 456, emoji: '📹' },
+            { id: 16, name: 'میکروفون استودیو', price: 4500000, originalPrice: 7000000, discount: 35, rating: 4.8, reviews: 567, emoji: '🎤' },
+        ];
+
+        let cart = [];
+        let currentUser = null;
+        let users = JSON.parse(localStorage.getItem('redshop_users')) || [];
+
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isDark = !document.body.classList.contains('light-mode');
+            localStorage.setItem('redshop_theme', isDark ? 'dark' : 'light');
+            updateThemeButton();
+        }
+
+        function updateThemeButton() {
+            const btn = document.querySelector('.theme-toggle');
+            const isDark = !document.body.classList.contains('light-mode');
+            btn.textContent = isDark ? '☀️' : '🌙';
+        }
+
+        // Page navigation
+        function showPage(pageName) {
+            if (!currentUser && pageName !== 'home' && pageName !== 'about' && pageName !== 'mission' && pageName !== 'team' && pageName !== 'services' && pageName !== 'contact' && pageName !== 'faq' && pageName !== 'terms') {
+                alert('لطفاً ابتدا وارد شوید');
+                openLoginModal();
+                return;
+            }
+
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            const pageMap = {
+                'home': 'homePage',
+                'about': 'aboutPage',
+                'mission': 'missionPage',
+                'team': 'teamPage',
+                'services': 'servicesPage',
+                'profile': 'profilePage',
+                'orders': 'ordersPage',
+                'wishlist': 'wishlistPage',
+                'contact': 'contactPage',
+                'faq': 'faqPage',
+                'terms': 'termsPage'
+            };
+
+            const pageId = pageMap[pageName];
+            if (pageId) {
+                document.getElementById(pageId).classList.add('active');
+                if (pageName === 'profile' && currentUser) {
+                    document.getElementById('profileName').textContent = currentUser.name;
+                    document.getElementById('profilePhone').textContent = currentUser.phone;
+                }
+            }
+        }
+
+        // Render products
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-image">
+                        ${product.emoji}
+                        <div class="discount-badge">${product.discount}%</div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-rating">
+                            <span class="star">⭐</span>
+                            <span>${product.rating} (${product.reviews})</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price">${formatPrice(product.price)}</span>
+                            <span class="original-price">${formatPrice(product.originalPrice)}</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn-add-cart" onclick="addToCart(${product.id})">افزودن به سبد</button>
+                            <button class="btn-wishlist" onclick="toggleWishlist(this)">❤️</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Format price
+        function formatPrice(price) {
+            return new Intl.NumberFormat('fa-IR', {
+                style: 'currency',
+                currency: 'IRR',
+                minimumFractionDigits: 0,
+            }).format(price);
+        }
+
+        // Auth functions
+        function openLoginModal() {
+            document.getElementById('authModal').classList.add('active');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.form-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.form-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tab + 'Form').classList.add('active');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const phone = document.getElementById('loginPhone').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const user = users.find(u => u.phone === phone && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('redshop_currentUser', JSON.stringify(user));
+                updateUserUI();
+                closeAuthModal();
+                alert('خوش آمدید ' + user.name);
+            } else {
+                alert('شماره تلفن یا رمز عبور اشتباه است');
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const phone = document.getElementById('registerPhone').value;
+            const password = document.getElementById('registerPassword').value;
+            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+
+            if (password !== passwordConfirm) {
+                alert('رمز عبور‌ها مطابقت ندارند');
+                return;
+            }
+
+            if (users.find(u => u.phone === phone)) {
+                alert('این شماره تلفن قبلاً ثبت شده است');
+                return;
+            }
+
+            const newUser = { name, phone, password };
+            users.push(newUser);
+            localStorage.setItem('redshop_users', JSON.stringify(users));
+
+            currentUser = newUser;
+            localStorage.setItem('redshop_currentUser', JSON.stringify(newUser));
+            updateUserUI();
+            closeAuthModal();
+            alert('ثبت نام موفق! خوش آمدید ' + name);
+        }
+
+        function updateUserUI() {
+            const userInfo = document.getElementById('userInfo');
+            const loginBtn = document.getElementById('loginBtn');
+            const userName = document.getElementById('userName');
+
+            if (currentUser) {
+                userInfo.classList.add('active');
+                loginBtn.style.display = 'none';
+                userName.textContent = currentUser.name;
+            } else {
+                userInfo.classList.remove('active');
+                loginBtn.style.display = 'block';
+            }
+        }
+
+        function toggleUserMenu() {
+            document.getElementById('userMenu').classList.toggle('active');
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('redshop_currentUser');
+            updateUserUI();
+            toggleUserMenu();
+            showPage('home');
+            alert('خروج موفق');
+        }
+
+        // Add to cart
+        function addToCart(productId) {
+            if (!currentUser) {
+                alert('لطفاً ابتدا وارد شوید');
+                openLoginModal();
+                return;
+            }
+
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCart();
+            toggleCart();
+        }
+
+        // Update cart display
+        function updateCart() {
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p style="text-align: center; color: var(--text-muted);">سبد خرید خالی است</p>';
+                cartTotal.textContent = '۰ تومان';
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            cartItems.innerHTML = cart.map((item, index) => `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">${formatPrice(item.price)}</div>
+                    </div>
+                    <div class="cart-item-qty">
+                        <button onclick="decreaseQty(${index})">−</button>
+                        <span>${item.quantity}</span>
+                        <button onclick="increaseQty(${index})">+</button>
+                    </div>
+                    <button onclick="removeFromCart(${index})" style="background: none; border: none; color: var(--danger); cursor: pointer; margin-right: 0.5rem;">✕</button>
+                </div>
+            `).join('');
+
+            cartTotal.textContent = formatPrice(total);
+        }
+
+        // Cart functions
+        function increaseQty(index) {
+            cart[index].quantity++;
+            updateCart();
+        }
+
+        function decreaseQty(index) {
+            if (cart[index].quantity > 1) {
+                cart[index].quantity--;
+            } else {
+                removeFromCart(index);
+            }
+            updateCart();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        function toggleCart() {
+            document.getElementById('cartSidebar').classList.toggle('open');
+        }
+
+        function toggleWishlist(button) {
+            button.style.opacity = button.style.opacity === '0.5' ? '1' : '0.5';
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            renderProducts();
+            const savedUser = localStorage.getItem('redshop_currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateUserUI();
+            }
+
+            const savedTheme = localStorage.getItem('redshop_theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+            }
+            updateThemeButton();
+        });
+
+        // Close modal on outside click
+        document.getElementById('authModal').addEventListener('click', (e) => {
+            if (e.target.id === 'authModal') {
+                closeAuthModal();
+            }
+        });
+    </script>
+</body>
+</html>

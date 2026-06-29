@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PyBot v2.0</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+  :root {
+    --bg:       #0d1117;
+    --surface:  #161b22;
+    --panel:    #1c2230;
+    --border:   #2a3444;
+    --accent:   #38bdf8;
+    --accent2:  #818cf8;
+    --green:    #4ade80;
+    --yellow:   #fbbf24;
+    --red:      #f87171;
+    --text:     #e6edf3;
+    --muted:    #8b949e;
+    --bot-bg:   #1a2332;
+    --user-bg:  #1e2a1e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+  .logo {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700; color: #000;
+  }
+  .header-info h1 { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: .5px; }
+  .header-info p  { font-size: 11px; color: var(--muted); }
+  .status-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    margin-left: auto;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  /* ── Main Layout ── */
+  .main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 220px;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-shrink: 0;
+    overflow-y: auto;
+  }
+  .sidebar h3 {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .quick-btn {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 7px 10px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: right;
+    transition: all .15s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .quick-btn:hover {
+    background: var(--border);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .quick-btn .icon { font-size: 14px; flex-shrink: 0; }
+
+  .stats-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  .stat-val { color: var(--accent); font-weight: 700; }
+
+  /* ── Chat Area ── */
+  .chat-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  #chat {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    scroll-behavior: smooth;
+  }
+  #chat::-webkit-scrollbar { width: 6px; }
+  #chat::-webkit-scrollbar-track { background: transparent; }
+  #chat::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .msg {
+    display: flex;
+    gap: 10px;
+    animation: fadeIn .2s ease;
+  }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+
+  .msg.bot { align-items: flex-start; }
+  .msg.user { flex-direction: row-reverse; }
+
+  .avatar {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .bot  .avatar { background: linear-gradient(135deg,var(--accent),var(--accent2)); color:#000; }
+  .user .avatar { background: var(--user-bg); border: 1px solid var(--border); }
+
+  .bubble {
+    max-width: 72%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .bot  .bubble {
+    background: var(--bot-bg);
+    border: 1px solid var(--border);
+    color: var(--accent);
+  }
+  .user .bubble {
+    background: var(--user-bg);
+    border: 1px solid #2a4a2a;
+    color: var(--green);
+  }
+
+  .bubble.system {
+    color: var(--yellow);
+    background: #1e1a0e;
+    border-color: #4a3a0a;
+    font-size: 12px;
+  }
+  .bubble.error {
+    color: var(--red);
+    background: #1e0e0e;
+    border-color: #4a1a1a;
+  }
+
+  /* ── Typing indicator ── */
+  .typing-dot {
+    display: inline-flex; gap: 4px; align-items: center; padding: 4px 0;
+  }
+  .typing-dot span {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent); opacity: .4;
+    animation: blink 1.2s infinite;
+  }
+  .typing-dot span:nth-child(2) { animation-delay: .2s; }
+  .typing-dot span:nth-child(3) { animation-delay: .4s; }
+  @keyframes blink { 0%,80%,100%{opacity:.2} 40%{opacity:1} }
+
+  /* ── Input Bar ── */
+  .input-bar {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    flex-shrink: 0;
+  }
+  #userInput {
+    flex: 1;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    resize: none;
+    outline: none;
+    max-height: 120px;
+    line-height: 1.5;
+    transition: border-color .15s;
+    direction: ltr;
+    text-align: left;
+  }
+  #userInput:focus { border-color: var(--accent); }
+  #userInput::placeholder { color: var(--muted); }
+
+  #sendBtn {
+    background: var(--accent);
+    border: none;
+    color: #000;
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    transition: transform .1s, background .15s;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  #sendBtn:hover { background: #67d8f5; }
+  #sendBtn:active { transform: scale(.93); }
+
+  /* scrollbar for sidebar */
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* quiz highlight */
+  .bubble.quiz { color: var(--yellow); border-color: #4a3a0a; background: #1e1a0e; }
+
+  @media(max-width:600px){
+    .sidebar { display: none; }
+    .bubble { max-width: 90%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🤖</div>
+  <div class="header-info">
+    <h1>PyBot v2.0</h1>
+    <p>Advanced Python Chatbot — Web Edition</p>
+  </div>
+  <div class="status-dot"></div>
+</header>
+
+<div class="main">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h3>دستورات سریع</h3>
+    <button class="quick-btn" onclick="send('help')"><span class="icon">❓</span>راهنما</button>
+    <button class="quick-btn" onclick="send('joke')"><span class="icon">😄</span>جوک</button>
+    <button class="quick-btn" onclick="send('quote')"><span class="icon">💬</span>نقل‌قول</button>
+    <button class="quick-btn" onclick="send('what time is it')"><span class="icon">🕐</span>ساعت</button>
+    <button class="quick-btn" onclick="send('what is today date')"><span class="icon">📅</span>تاریخ</button>
+    <button class="quick-btn" onclick="send('quiz')"><span class="icon">🧠</span>کوییز</button>
+    <button class="quick-btn" onclick="send('todo list')"><span class="icon">📋</span>وظایف</button>
+    <button class="quick-btn" onclick="send('stats')"><span class="icon">📊</span>آمار</button>
+    <button class="quick-btn" onclick="send('10 km to miles')"><span class="icon">📐</span>تبدیل واحد</button>
+
+    <div style="margin-top:auto">
+      <h3>آمار جلسه</h3>
+      <div class="stats-box">
+        <div>پیام‌ها: <span class="stat-val" id="statTurns">0</span></div>
+        <div>حال شما: <span class="stat-val" id="statMood">neutral</span></div>
+        <div id="statName" style="display:none">کاربر: <span class="stat-val" id="statNameVal"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat -->
+  <div class="chat-wrap">
+    <div id="chat"></div>
+    <div class="input-bar">
+      <textarea id="userInput" rows="1" placeholder="پیام خود را اینجا بنویسید... (Enter برای ارسال)"></textarea>
+      <button id="sendBtn" onclick="handleSend()">➤</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════════════════════
+const state = {
+  history: [],
+  userName: null,
+  turns: 0,
+  mood: 'neutral',
+  quizActive: false,
+  quizQuestions: [],
+  quizIndex: 0,
+  quizScore: 0,
+  quizHintUsed: false,
+  todos: [],
+  nextTodoId: 1,
+};
+
+// ══════════════════════════════════════════════════════════════════════
+//  DATA BANKS
+// ══════════════════════════════════════════════════════════════════════
+const GREET = [
+  "Hey there! How can I help you today?",
+  "Hello! What's on your mind?",
+  "Hi! Ready to chat — what can I do for you?",
+  "Greetings! I'm PyBot. Ask me anything.",
+];
+const FAREWELL = [
+  "Goodbye! It was great chatting with you. 👋",
+  "See you next time! Take care.",
+  "Bye! Come back whenever you need help.",
+  "Farewell! Have a wonderful day. 🌟",
+];
+const HOW_ARE_YOU = [
+  "I'm running great, all systems go!",
+  "Doing well, thanks for asking! How about you?",
+  "Fantastic! Just processed a few million tokens. You?",
+  "Better than ever! What can I help with?",
+];
+const JOKES = [
+  ["Why do programmers prefer dark mode?","Because light attracts bugs!"],
+  ["What's a computer's favorite snack?","Microchips!"],
+  ["Why did the developer go broke?","Because he used up all his cache."],
+  ["What's an algorithm?","A word used by programmers when they don't want to explain what they did."],
+  ["Why do Java developers wear glasses?","Because they can't C#!"],
+  ["How many programmers does it take to change a light bulb?","None — that's a hardware problem."],
+  ["What do you call a fish without eyes?","A fsh!"],
+  ["Why was the math book sad?","It had too many problems."],
+];
+const QUOTES = [
+  ["Talk is cheap. Show me the code.","Linus Torvalds"],
+  ["Any fool can write code that a computer can understand. Good programmers write code that humans can understand.","Martin Fowler"],
+  ["First, solve the problem. Then, write the code.","John Johnson"],
+  ["The best way to predict the future is to invent it.","Alan Kay"],
+  ["Simplicity is the soul of efficiency.","Austin Freeman"],
+  ["Code is like humor. When you have to explain it, it's bad.","Cory House"],
+  ["Make it work, make it right, make it fast.","Kent Beck"],
+];
+const FALLBACK = [
+  "Interesting — tell me more!",
+  "I'm not sure I follow. Could you rephrase that?",
+  "Hmm, I'm still learning. Could you say that differently?",
+  "That's a bit beyond me right now. Try 'help' to see what I can do!",
+  "I didn't quite catch that. Type 'help' to see what I can do.",
+];
+const TRIVIA = [
+  {q:"What is the capital of France?",          a:"paris",       hint:"City of Love"},
+  {q:"How many sides does a hexagon have?",      a:"6",           hint:"More than a pentagon"},
+  {q:"What is the chemical symbol for gold?",    a:"au",          hint:"From Latin 'aurum'"},
+  {q:"Who wrote 'Romeo and Juliet'?",            a:"shakespeare", hint:"An Elizabethan playwright"},
+  {q:"What planet is known as the Red Planet?",  a:"mars",        hint:"Named after the god of war"},
+  {q:"What is the largest ocean on Earth?",      a:"pacific",     hint:"Bigger than all land combined"},
+  {q:"In what year did World War II end?",       a:"1945",        hint:"The mid-40s"},
+  {q:"What gas do plants absorb from the air?",  a:"co2",         hint:"Carbon ___"},
+  {q:"How many bones in the adult human body?",  a:"206",         hint:"About 200"},
+  {q:"What is the speed of light (km/s)?",       a:"299792",      hint:"About 300,000 km/s"},
+  {q:"Who painted the Mona Lisa?",               a:"da vinci",    hint:"Italian Renaissance master"},
+  {q:"What is the smallest prime number?",       a:"2",           hint:"The only even prime"},
+  {q:"What language is spoken in Brazil?",       a:"portuguese",  hint:"Not Spanish!"},
+  {q:"How many continents are there?",           a:"7",           hint:"One more than 6"},
+  {q:"What is H2O commonly known as?",           a:"water",       hint:"You drink it every day"},
+];
+
+// ══════════════════════════════════════════════════════════════════════
+//  SENTIMENT ANALYZER
+// ══════════════════════════════════════════════════════════════════════
+const POS_WORDS = new Set(["good","great","awesome","excellent","happy","love","like","fantastic","wonderful","amazing","nice","best","cool","fun","enjoy","pleased","glad","thanks","thank","helpful","perfect","brilliant","superb","beautiful","joy","excited","positive"]);
+const NEG_WORDS = new Set(["bad","terrible","awful","hate","dislike","worst","horrible","annoying","boring","useless","stupid","dumb","ugly","sad","angry","frustrated","disappointed","wrong","error","broken","problem","issue","fail","failed","crash","confusing"]);
+const INTENSIFIERS = new Set(["very","really","so","extremely","super","quite"]);
+const NEGATIONS = new Set(["not","no","never","dont","doesn't","isn't","won't"]);
+
+function analyzeSentiment(text) {
+  const tokens = text.toLowerCase().match(/\b\w+\b/g) || [];
+  let score = 0, negate = false;
+  tokens.forEach((tok, i) => {
+    if (NEGATIONS.has(tok)) { negate = true; return; }
+    const mult = (i > 0 && INTENSIFIERS.has(tokens[i-1])) ? 1.5 : 1.0;
+    if (POS_WORDS.has(tok)) score += mult * (negate ? -1 : 1);
+    else if (NEG_WORDS.has(tok)) score -= mult * (negate ? -1 : 1);
+    negate = false;
+  });
+  if (score > 0.5) return "positive";
+  if (score < -0.5) return "negative";
+  return "neutral";
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  MATH EVALUATOR  (safe recursive descent)
+// ══════════════════════════════════════════════════════════════════════
+class MathEvaluator {
+  eval(expr) {
+    this.tokens = this._tokenize(expr);
+    this.pos = 0;
+    const r = this._expr();
+    if (this.pos < this.tokens.length) throw new Error("Unexpected: " + this.tokens[this.pos].val);
+    return r;
+  }
+  _tokenize(expr) {
+    const re = /\s*(?:(\d+\.?\d*(?:e[+-]?\d+)?)|([a-zA-Z_]\w*)|(\*\*|[+\-*/%()]))/g;
+    const toks = [];
+    let m;
+    while ((m = re.exec(expr)) !== null) {
+      if (m[1]) toks.push({t:'NUM', val:parseFloat(m[1])});
+      else if (m[2]) toks.push({t:'ID',  val:m[2]});
+      else           toks.push({t:'OP',  val:m[3]});
+    }
+    return toks;
+  }
+  _peek() { return this.tokens[this.pos]; }
+  _consume() { return this.tokens[this.pos++]; }
+  _expr() { return this._additive(); }
+  _additive() {
+    let l = this._mult();
+    while (this._peek() && (this._peek().val==='+' || this._peek().val==='-')) {
+      const op = this._consume().val;
+      const r = this._mult();
+      l = op==='+' ? l+r : l-r;
+    }
+    return l;
+  }
+  _mult() {
+    let l = this._power();
+    while (this._peek() && [' *','/','%'].includes(' '+this._peek().val)) {
+      const op = this._consume().val;
+      const r = this._power();
+      if (op==='*') l*=r;
+      else if (op==='/') { if(r===0) throw new Error("Division by zero"); l/=r; }
+      else l%=r;
+    }
+    return l;
+  }
+  _power() {
+    const base = this._unary();
+    if (this._peek() && this._peek().val==='**') { this._consume(); return Math.pow(base, this._power()); }
+    return base;
+  }
+  _unary() {
+    if (this._peek() && this._peek().val==='-') { this._consume(); return -this._primary(); }
+    if (this._peek() && this._peek().val==='+') { this._consume(); }
+    return this._primary();
+  }
+  _primary() {
+    const tok = this._peek();
+    if (!tok) throw new Error("Unexpected end");
+    if (tok.t==='NUM') { this._consume(); return tok.val; }
+    const CONSTS = {pi:Math.PI, e:Math.E};
+    const FUNCS = {sqrt:Math.sqrt, abs:Math.abs, sin:Math.sin, cos:Math.cos, tan:Math.tan, log:Math.log, log10:Math.log10, ceil:Math.ceil, floor:Math.floor, round:Math.round};
+    if (tok.t==='ID') {
+      const name = tok.val; this._consume();
+      if (CONSTS[name] !== undefined) return CONSTS[name];
+      if (FUNCS[name]) {
+        if (!this._peek() || this._peek().val!=='(') throw new Error("Expected '(' after "+name);
+        this._consume();
+        const arg = this._expr();
+        if (!this._peek() || this._peek().val!==')') throw new Error("Expected ')'");
+        this._consume();
+        return FUNCS[name](arg);
+      }
+      throw new Error("Unknown: "+name);
+    }
+    if (tok.val==='(') {
+      this._consume();
+      const v = this._expr();
+      if (!this._peek() || this._peek().val!==')') throw new Error("Missing ')'");
+      this._consume();
+      return v;
+    }
+    throw new Error("Unexpected token: "+tok.val);
+  }
+}
+const mathEval = new MathEvaluator();
+
+// ══════════════════════════════════════════════════════════════════════
+//  UNIT CONVERTER
+// ══════════════════════════════════════════════════════════════════════
+const UNITS = {
+  length: {m:1,meter:1,meters:1,km:1000,kilometer:1000,kilometers:1000,cm:.01,centimeter:.01,centimeters:.01,mm:.001,millimeter:.001,millimeters:.001,mi:1609.344,mile:1609.344,miles:1609.344,ft:.3048,foot:.3048,feet:.3048,in:.0254,inch:.0254,inches:.0254,yd:.9144,yard:.9144,yards:.9144},
+  weight: {kg:1,kilogram:1,kilograms:1,g:.001,gram:.001,grams:.001,lb:.453592,pound:.453592,pounds:.453592,oz:.0283495,ounce:.0283495,ounces:.0283495,t:1000,ton:1000,tons:1000},
+  speed:  {mps:1,'m/s':1,kph:1/3.6,'km/h':1/3.6,kmh:1/3.6,mph:.44704,'mi/h':.44704,knot:.514444,knots:.514444,fps:.3048,'ft/s':.3048},
+};
+
+function convertTemp(val, from, to) {
+  const alias = {c:'celsius',f:'fahrenheit',k:'kelvin'};
+  const f = alias[from.toLowerCase()] || from.toLowerCase();
+  const t = alias[to.toLowerCase()] || to.toLowerCase();
+  let c;
+  if (f==='celsius') c=val;
+  else if (f==='fahrenheit') c=(val-32)*5/9;
+  else if (f==='kelvin') c=val-273.15;
+  else throw new Error("Unknown unit: "+f);
+  if (t==='celsius') return c;
+  if (t==='fahrenheit') return c*9/5+32;
+  if (t==='kelvin') return c+273.15;
+  throw new Error("Unknown unit: "+t);
+}
+
+function tryConvert(text) {
+  // Temperature
+  const tempRe = /([\d.]+)\s*(celsius|fahrenheit|kelvin|c|f|k)\s+(?:to|in)\s+(celsius|fahrenheit|kelvin|c|f|k)/i;
+  let m = text.match(tempRe);
+  if (m) {
+    try {
+      const res = convertTemp(parseFloat(m[1]), m[2], m[3]);
+      return `${m[1]} ${m[2]} = ${res.toFixed(4)} ${m[3]}`;
+    } catch(e) {}
+  }
+  // Other
+  const re = /([\d.]+)\s+(\w+(?:\/\w+)?)\s+(?:to|in)\s+(\w+(?:\/\w+)?)/i;
+  m = text.match(re);
+  if (!m) return null;
+  const val = parseFloat(m[1]);
+  const fu = m[2].toLowerCase(), tu = m[3].toLowerCase();
+  for (const [cat, table] of Object.entries(UNITS)) {
+    if (fu in table && tu in table) {
+      const result = val * table[fu] / table[tu];
+      const fmt = Number.isInteger(result) ? result.toString() : parseFloat(result.toPrecision(6));
+      return `${val} ${fu} = ${fmt} ${tu}  (${cat})`;
+    }
+  }
+  return null;
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  TODO MANAGER
+// ══════════════════════════════════════════════════════════════════════
+function handleTodo(text) {
+  const low = text.toLowerCase().trim();
+  if (/\btodo\s+list\b|\bshow\s+tasks\b/.test(low)) {
+    if (!state.todos.length) return "No tasks yet. Add one with: todo add <task>";
+    return "📋 Your Tasks:\n" + state.todos.map(t => {
+      const check = t.done ? "✓" : "○";
+      return `  [${check}] #${t.id}  ${t.done ? "~~"+t.text+"~~" : t.text}`;
+    }).join("\n") + `\n\n  ${state.todos.filter(t=>!t.done).length} pending / ${state.todos.length} total`;
+  }
+  let m = text.match(/\btodo\s+add\s+(.+)/i);
+  if (m) {
+    const item = {id: state.nextTodoId++, text: m[1].trim(), done: false};
+    state.todos.push(item);
+    return `Added task #${item.id}: ${item.text}`;
+  }
+  m = low.match(/\btodo\s+done\s+(\d+)/);
+  if (m) {
+    const id = parseInt(m[1]);
+    const item = state.todos.find(t=>t.id===id);
+    if (item) { item.done = true; return `Task #${id} marked as done. ✓`; }
+    return `Task #${id} not found.`;
+  }
+  m = low.match(/\btodo\s+remove\s+(\d+)/);
+  if (m) {
+    const id = parseInt(m[1]);
+    const idx = state.todos.findIndex(t=>t.id===id);
+    if (idx>=0) { state.todos.splice(idx,1); return `Task #${id} removed.`; }
+    return `Task #${id} not found.`;
+  }
+  if (/\btodo\s+clear\b/.test(low)) {
+    const before = state.todos.length;
+    state.todos = state.todos.filter(t=>!t.done);
+    return `Cleared ${before - state.todos.length} completed task(s).`;
+  }
+  return "Todo commands:\n  todo add <task>\n  todo list\n  todo done <id>\n  todo remove <id>\n  todo clear";
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  QUIZ ENGINE
+// ══════════════════════════════════════════════════════════════════════
+function startQuiz(count=5) {
+  const shuffled = [...TRIVIA].sort(()=>Math.random()-.5).slice(0, Math.min(count, TRIVIA.length));
+  state.quizActive = true;
+  state.quizQuestions = shuffled;
+  state.quizIndex = 0;
+  state.quizScore = 0;
+  state.quizHintUsed = false;
+  return "🧠 Quiz started!\n\n" + quizCurrentQuestion();
+}
+function quizCurrentQuestion() {
+  if (state.quizIndex >= state.quizQuestions.length) return finishQuiz();
+  const q = state.quizQuestions[state.quizIndex];
+  return `Question ${state.quizIndex+1}/${state.quizQuestions.length}\n${q.q}\n(type your answer, 'hint' for a clue, or 'skip' to skip)`;
+}
+function answerQuiz(text) {
+  const q = state.quizQuestions[state.quizIndex];
+  const lower = text.trim().toLowerCase();
+  if (lower === 'hint') {
+    state.quizHintUsed = true;
+    return `Hint: ${q.hint}`;
+  }
+  if (lower === 'skip') {
+    state.quizIndex++;
+    state.quizHintUsed = false;
+    return `Skipped! The answer was: ${q.a}\n\n` + quizCurrentQuestion();
+  }
+  if (lower === q.a || lower.includes(q.a)) {
+    const pts = state.quizHintUsed ? 0 : 1;
+    state.quizScore += pts;
+    state.quizIndex++;
+    state.quizHintUsed = false;
+    const fb = `✓ Correct!${pts===0 ? ' (no points — hint used)' : ' +1 point'}`;
+    return fb + "\n\n" + quizCurrentQuestion();
+  }
+  const fb = `✗ Wrong! The answer was: ${q.a}`;
+  state.quizIndex++;
+  state.quizHintUsed = false;
+  return fb + "\n\n" + quizCurrentQuestion();
+}
+function finishQuiz() {
+  state.quizActive = false;
+  const total = state.quizQuestions.length;
+  const pct = Math.round(state.quizScore / total * 100);
+  const grade = pct===100?"🏆 Outstanding!":pct>=80?"🎉 Great job!":pct>=60?"👍 Not bad!":"📚 Keep practicing!";
+  return `Quiz finished!\nScore: ${state.quizScore}/${total}  (${pct}%)\n${grade}`;
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  MAIN BOT PROCESSOR
+// ══════════════════════════════════════════════════════════════════════
+function pick(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
+
+function processInput(text) {
+  const t = text.trim();
+  if (!t) return {text:"(Please type something — or 'help' for options.)", type:'system'};
+
+  const low = t.toLowerCase();
+  state.mood = analyzeSentiment(t);
+  state.turns++;
+  updateStats();
+
+  // Quiz mode intercepts everything
+  if (state.quizActive) {
+    return {text: answerQuiz(t), type:'quiz'};
+  }
+
+  // Todo
+  if (/\btodo\b|\bshow\s+tasks\b/.test(low)) {
+    return {text: handleTodo(t), type:'bot'};
+  }
+
+  // Start quiz
+  if (/\b(quiz|trivia|test\s+me)\b/.test(low)) {
+    const m = t.match(/(\d+)\s+question/i);
+    const count = m ? parseInt(m[1]) : 5;
+    return {text: startQuiz(count), type:'quiz'};
+  }
+
+  // Greeting
+  if (/\b(hi|hello|hey|howdy|greetings|sup|salam|yo)\b/.test(low) || /good (morning|evening|afternoon)/.test(low)) {
+    const name = state.userName;
+    return {text: (name ? `Welcome back, ${name}! ` : '') + pick(GREET), type:'bot'};
+  }
+
+  // Farewell
+  if (/\b(bye|goodbye|exit|quit|farewell|see you|cya)\b/.test(low)) {
+    return {text: pick(FAREWELL), type:'bot', exit:true};
+  }
+
+  // How are you
+  if (/how\s+are\s+you|you\s+doing|you\s+ok|how r u/.test(low)) {
+    return {text: pick(HOW_ARE_YOU), type:'bot'};
+  }
+
+  // Set name
+  const nameM = t.match(/(?:my name is|call me)\s+([a-zA-Z]+)/i);
+  if (nameM) {
+    state.userName = nameM[1].charAt(0).toUpperCase() + nameM[1].slice(1);
+    updateStats();
+    return {text: `Nice to meet you, ${state.userName}! I'll remember your name. 😊`, type:'bot'};
+  }
+
+  // Who are you
+  if (/what.*your\s+name|who\s+are\s+you|are\s+you\s+(a\s+bot|ai|human)/.test(low)) {
+    return {text: "I'm PyBot v2.0, an advanced Python chatbot — now running in your browser!", type:'bot'};
+  }
+
+  // Time
+  if (/what.*time|current\s+time|clock/.test(low)) {
+    const now = new Date();
+    return {text: `Current time: ${now.toLocaleTimeString()}  (${now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})})`, type:'bot'};
+  }
+
+  // Date
+  if (/what.*date|today.*date|what\s+day/.test(low) || low==="date") {
+    const now = new Date();
+    return {text: `Today is ${now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}.`, type:'bot'};
+  }
+
+  // Math
+  if (/\b(calculate|compute|eval|math)\b/.test(low) || /[\d.]+\s*[\+\-\*\/\^%]\s*[\d.(]/.test(t) || /\b(sqrt|sin|cos|tan|log|abs)\b/.test(low)) {
+    let expr = t.replace(/^(calculate|compute|what\s+is|eval|math)\s*/i,'').trim();
+    try {
+      const result = mathEval.eval(expr);
+      const fmt = Number.isInteger(result) ? result : parseFloat(result.toPrecision(10));
+      return {text: `${expr} = ${fmt}`, type:'bot'};
+    } catch(e) {
+      return {text: `Could not evaluate: ${e.message}\nTry: calculate 2**10 + sqrt(144)`, type:'error'};
+    }
+  }
+
+  // Convert
+  if (/\bconvert\b|\bhow\s+(many|much)/.test(low) || /[\d.]+\s+\w+\s+(to|in)\s+\w+/.test(low)) {
+    const res = tryConvert(t);
+    if (res) return {text: res, type:'bot'};
+    return {text:"Couldn't parse that conversion.\nTry:\n  10 km to miles\n  72 fahrenheit to celsius\n  5 kg to lb", type:'error'};
+  }
+
+  // Joke
+  if (/tell.*joke|funny|joke|make.*laugh|humor/.test(low)) {
+    const [setup, punch] = pick(JOKES);
+    return {text: `${setup}\n\n... ${punch}`, type:'bot'};
+  }
+
+  // Quote
+  if (/\b(quote|inspire|motivation|wisdom|motivate)\b/.test(low)) {
+    const [q, author] = pick(QUOTES);
+    return {text: `"${q}"\n    — ${author}`, type:'bot'};
+  }
+
+  // Help
+  if (/\bhelp\b|what\s+can\s+you\s+do|commands|usage|guide/.test(low)) {
+    return {text:`╔══════════════════════════════════════╗
+║         PyBot — What I Can Do        ║
+╠══════════════════════════════════════╣
+║  🕐  time / date     Current time    ║
+║  🔢  calculate <expr> Math & more    ║
+║  📐  convert         Unit converter  ║
+║  📋  todo            Task manager    ║
+║  🧠  quiz            Trivia quiz     ║
+║  😄  joke            Random joke     ║
+║  💬  quote           Inspiration     ║
+║  📊  stats           Session info    ║
+║  🚪  bye / exit      End session     ║
+╚══════════════════════════════════════╝
+
+Examples:
+  calculate sqrt(144) + 2**8
+  10 km to miles
+  72 fahrenheit to celsius
+  my name is Alex
+  todo add Buy groceries`, type:'bot'};
+  }
+
+  // Stats
+  if (/\b(stats|statistics|session|my\s+stats)\b/.test(low)) {
+    const lines = [`📊 Session Statistics`,
+      state.userName ? `User           : ${state.userName}` : null,
+      `Turns          : ${state.turns}`,
+      `Mood           : ${state.mood}`,
+      `Tasks          : ${state.todos.length} (${state.todos.filter(t=>t.done).length} done)`,
+    ].filter(Boolean);
+    return {text: lines.join('\n'), type:'bot'};
+  }
+
+  // Weather
+  if (/\b(weather|forecast)\b/.test(low)) {
+    return {text:"I don't have live weather data, but I can convert temperatures!\nTry: 25 celsius to fahrenheit", type:'bot'};
+  }
+
+  // Mood / sentiment check
+  if (/how.*i.*feel|my\s+mood/.test(low)) {
+    const msgs = {positive:"I'm glad you're feeling positive! Keep it up 😊", negative:"I'm sorry things aren't great. I'm here to help!", neutral:"I'm picking up a calm vibe. What's on your mind?"};
+    return {text: msgs[state.mood] || msgs.neutral, type:'bot'};
+  }
+
+  return {text: pick(FALLBACK), type:'bot', confidence:0.1};
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  UI HELPERS
+// ══════════════════════════════════════════════════════════════════════
+function appendMsg(role, text, type='bot') {
+  const chat = document.getElementById('chat');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar';
+  avatar.textContent = role==='bot' ? '🤖' : '👤';
+  const bubble = document.createElement('div');
+  bubble.className = `bubble ${type==='system'?'system':type==='error'?'error':type==='quiz'?'quiz':''}`;
+  bubble.textContent = text;
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
+}
+
+function showTyping() {
+  const chat = document.getElementById('chat');
+  const div = document.createElement('div');
+  div.className = 'msg bot';
+  div.id = 'typing-indicator';
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar';
+  avatar.textContent = '🤖';
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.innerHTML = '<span class="typing-dot"><span></span><span></span><span></span></span>';
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function removeTyping() {
+  const el = document.getElementById('typing-indicator');
+  if (el) el.remove();
+}
+
+function updateStats() {
+  document.getElementById('statTurns').textContent = state.turns;
+  document.getElementById('statMood').textContent = state.mood;
+  if (state.userName) {
+    document.getElementById('statName').style.display = '';
+    document.getElementById('statNameVal').textContent = state.userName;
+  }
+}
+
+function send(text) {
+  const input = document.getElementById('userInput');
+  input.value = text;
+  handleSend();
+}
+
+function handleSend() {
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  input.style.height = 'auto';
+
+  appendMsg('user', text, 'user');
+  showTyping();
+
+  const delay = 300 + Math.min(text.length * 12, 900);
+  setTimeout(() => {
+    removeTyping();
+    const response = processInput(text);
+    appendMsg('bot', response.text, response.type || 'bot');
+  }, delay);
+}
+
+// Auto-resize textarea
+const inp = document.getElementById('userInput');
+inp.addEventListener('input', () => {
+  inp.style.height = 'auto';
+  inp.style.height = Math.min(inp.scrollHeight, 120) + 'px';
+});
+inp.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+});
+
+// ══════════════════════════════════════════════════════════════════════
+//  BOOT
+// ══════════════════════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    appendMsg('bot',
+`Welcome to PyBot v2.0! 🤖
+
+I'm an advanced Python chatbot — now running in your browser.
+
+Things I can do:
+  • Math: calculate sqrt(144) + 2**10
+  • Convert: 10 km to miles
+  • Trivia quiz: type 'quiz'
+  • Task manager: todo add Buy groceries
+  • Jokes, quotes, time, stats...
+
+Type 'help' to see all commands.
+What's your name?`, 'bot');
+  }, 400);
+});
+</script>
+</body>
+</html>
