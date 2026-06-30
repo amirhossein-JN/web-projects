@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>المپیاد فناوری ۲۰۲۵</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <canvas id="particles" class="particles"></canvas>
+
+  <!-- ===== هدر ===== -->
+  <header class="navbar">
+    <div class="logo">المپیاد فناوری<span class="dot">.</span></div>
+    <nav>
+      <a href="#about">درباره</a>
+      <a href="#fields">حوزه‌ها</a>
+      <a href="#countdown">زمان‌بندی</a>
+      <a href="#register" class="btn-nav">ثبت‌نام</a>
+    </nav>
+  </header>
+
+  <!-- ===== بخش معرفی (Hero) ===== -->
+  <section class="hero" id="about">
+    <span class="eyebrow">ثبت‌نام دوره ۲۰۲۵ آغاز شد</span>
+    <h1>بزرگ‌ترین رقابت <span>فناوری و نوآوری</span> کشور</h1>
+    <p>بهترین‌های فناوری از سراسر کشور گرد هم می‌آیند تا قهرمان هر حوزه را مشخص کنند. آماده‌ای برای رقابت؟</p>
+    <div class="hero-actions">
+      <a href="#register" class="btn-primary">همین حالا ثبت‌نام کن</a>
+      <a href="#fields" class="btn-secondary">حوزه‌های رقابت</a>
+    </div>
+  </section>
+
+  <!-- ===== شمارش معکوس ===== -->
+  <section id="countdown" class="countdown">
+    <span class="label">شمارش معکوس</span>
+    <h2>تا شروع رویداد چقدر مونده؟</h2>
+    <div class="timer">
+      <div><span id="days">۰</span><small>روز</small></div>
+      <div><span id="hours">۰</span><small>ساعت</small></div>
+      <div><span id="minutes">۰</span><small>دقیقه</small></div>
+      <div><span id="seconds">۰</span><small>ثانیه</small></div>
+    </div>
+  </section>
+
+  <!-- ===== حوزه‌های رقابت ===== -->
+  <section id="fields" class="fields">
+    <span class="label">رشته‌ها</span>
+    <h2>حوزه‌های رقابت</h2>
+    <div class="cards">
+      <div class="card"><span class="num">۰۱</span>🤖<h3>هوش مصنوعی</h3></div>
+      <div class="card"><span class="num">۰۲</span>💻<h3>برنامه‌نویسی</h3></div>
+      <div class="card"><span class="num">۰۳</span>🔐<h3>امنیت سایبری</h3></div>
+      <div class="card"><span class="num">۰۴</span>⚔️<h3>ربات‌های جنگجو</h3></div>
+      <div class="card"><span class="num">۰۵</span>🌐<h3>اینترنت اشیا</h3></div>
+      <div class="card"><span class="num">۰۶</span>🚁<h3>پهپادها</h3></div>
+    </div>
+  </section>
+
+  <!-- ===== ثبت‌نام ===== -->
+  <section id="register" class="register">
+    <span class="label">پیوستن به رویداد</span>
+    <h2>ثبت‌نام در رویداد</h2>
+    <p>جای خودت رو رزرو کن، جاها محدوده.</p>
+    <form>
+      <input type="text" placeholder="نام و نام خانوادگی" required />
+      <input type="email" placeholder="ایمیل" required />
+      <select required>
+        <option value="">حوزه‌ی موردنظر را انتخاب کنید</option>
+        <option>هوش مصنوعی</option>
+        <option>برنامه‌نویسی</option>
+        <option>امنیت سایبری</option>
+        <option>ربات‌های جنگجو</option>
+        <option>اینترنت اشیا</option>
+        <option>پهپادها</option>
+      </select>
+      <button type="submit" class="btn-primary">ثبت‌نام</button>
+    </form>
+  </section>
+
+  <!-- ===== فوتر ===== -->
+  <footer>
+    <p>© ۲۰۲۵ المپیاد فناوری — تمامی حقوق محفوظ است.</p>
+  </footer>
+
+  <script src="particles.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
